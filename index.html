@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title> YEWON.GIM | Video Editor Portfolio</title>
+<style>
+
+/* =========================
+   BASIC RESET
+========================= */
+
+* {margin: 0; padding: 0; box-sizing: border-box;}
+html {scroll-behavior: smooth; scroll-padding-top: 90px;}
+body {font-family: 'Noto Sans KR', sans-serif; background: #fff; color: #171717; overflow-x: hidden;}
+a {color: inherit; text-decoration: none;}
+img, video {display: block; width: 100%;}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header { position: fixed; top: 0; left: 0; width: 100%; height: 70px; 
+        background: #050505; color: #fff; z-index: 1000;}
+.header-inner { width: 65%; max-width: 1200px; height: 100%; margin: auto; display: flex; 
+                align-items: center; justify-content: space-between;}
+.logo,
+.footer-logo { font-family: 'DM Serif Display', serif; font-size: 22px; letter-spacing: 4px;}
+.main-nav { display: flex; align-items: center; gap: 45px;}
+.main-nav a { font-family: 'DM Serif Display', serif; font-size: 20px; transition: opacity 0.3s;}
+.main-nav a:hover {opacity: 0.5;}
+.resume-link span {font-size: 24px; margin-left: 7px;}
+
+/* =========================
+   SIDE NAV
+========================= */
+
+.side-nav { position: fixed; top: 50%; right: 6%; transform: translateY(-50%); width: 70px; padding: 30px 40px;
+             background: #050505; color: white; border-radius: 10px; z-index: 900; display: flex;
+            flex-direction: column; align-items: center; gap: 22px;}
+.side-nav a {font-family: 'DM Serif Display', serif;font-size: 14px; transform: scale(0.85); 
+    display: inline-block;}
+.side-nav a:hover {opacity: 0.5;}
+
+/* =========================
+   HERO / INTRO MOTION DESIGN
+========================= */
+
+.hero {position: relative; isolation: isolate; width: 100%; min-height: 100vh; display: flex; 
+    justify-content: center; align-items: center; overflow: hidden; text-align: left;
+    padding: 120px 8% 70px; background: #080808; color: #fff;}
+
+/* 배경 영상 또는 이미지 위에 어두운 필터 */
+.hero::before {content: ""; position: absolute; inset: 0; z-index: -2; background:
+        linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.48) 58%, rgba(0,0,0,.72) 100%),
+        url("소스/intro-bg.jpg") center/cover no-repeat;
+    transform: scale(1.04); animation: heroBgMove 16s ease-in-out infinite alternate;}
+
+/* 배경 위의 얇은 그리드 */
+.hero::after {content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    opacity: .13; background-image:
+        linear-gradient(rgba(255,255,255,.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.16) 1px, transparent 1px); background-size: 70px 70px;
+    mask-image: linear-gradient(to bottom, black, transparent 90%);}
+
+.hero-content {position: relative; z-index: 2; width: 100%; max-width: 1250px; display: flex; 
+    flex-direction: column; align-items: flex-start;}
+
+/* 상단 라벨 */
+.hero-small {display: flex; align-items: center; gap: 12px; margin-bottom: 28px; 
+    color: #c8c8c8; font-size: 11px; letter-spacing: 3px;
+}
+
+.hero-small::before {
+    content: "";
+    width: 32px;
+    height: 1px;
+    background: #fff;
+}
+
+/* 메인 키네틱 타이포그래피 */
+.hero h1 {
+    position: relative;
+    margin: 0 0 22px -7px;
+    color: #fff;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(76px, 12vw, 165px);
+    font-weight: 400;
+    letter-spacing: -7px;
+    line-height: .92;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: titleReveal 1.25s cubic-bezier(.2,.8,.2,1) .45s forwards;
+}
+
+.hero h1 span {
+    display: block;
+}
+
+.hero h1 .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,.8);
+    margin-left: 9vw;
+}
+
+/* 소개 문구 */
+.hero-description {
+    margin-top: 18px;
+    color: #c7c7c7;
+    font-size: 14px;
+    line-height: 2;
+    letter-spacing: .3px;
+}
+
+/* 프로젝트 프레임 3개 */
+.hero-reel {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    width: min(34vw, 430px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    transform: translateY(-43%) rotate(-5deg);
+    z-index: 1;
+    opacity: 0;
+    animation: reelReveal 1.2s ease 1s forwards;
+}
+
+.reel-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border: 1px solid rgba(255,255,255,.35);
+    background: #222;
+    box-shadow: 0 15px 35px rgba(0,0,0,.35);
+}
+
+.reel-frame:first-child {
+    grid-column: 1 / 3;
+    aspect-ratio: 16 / 9;
+}
+
+.reel-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: .78;
+    filter: saturate(.75);
+    transition: transform .7s ease, opacity .7s ease;
+}
+
+.reel-frame:hover img {
+    transform: scale(1.08);
+    opacity: 1;
+}
+
+.reel-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 45%, rgba(0,0,0,.4));
+    pointer-events: none;
+}
+
+/* 하단 편집 타임라인 장식 */
+.hero-timeline {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 105px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    opacity: 0;
+    animation: fadeUp .8s ease 1.35s forwards;
+}
+
+.timeline-track {
+    position: relative;
+    height: 5px;
+    flex: 1;
+    overflow: hidden;
+    background: rgba(255,255,255,.13);
+}
+
+.timeline-track::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 35%;
+    background: #fff;
+    animation: timelineMove 5s ease-in-out infinite alternate;
+}
+
+.timeline-label {
+    color: #999;
+    font: 9px Arial, sans-serif;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+}
+
+/* 스크롤 안내 */
+.scroll-down {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 38px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid rgba(255,255,255,.65);
+    color: #fff;
+    font-family: 'DM Serif Display', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.scroll-down span {
+    display: inline-block;
+    animation: arrowMove 1.3s ease-in-out infinite;
+}
+
+/* 장식용 좌표 및 세로 텍스트 */
+.hero-index {
+    position: absolute;
+    right: 3%;
+    bottom: 115px;
+    color: #777;
+    font: 9px Arial, sans-serif;
+    letter-spacing: 2px;
+    writing-mode: vertical-rl;
+}
+
+/* =========================
+   COMMON SECTION
+========================= */
+
+.section {width: 100%; max-width: 1200px; margin: auto; padding: 130px 8%;}
+.section-heading {margin-bottom: 70px;}
+.section-number {font-family: 'DM Serif Display', serif; font-size: 13px; letter-spacing: 2px; color: #888;
+                 margin-bottom: 15px;}
+
+.section-heading h2 {font-family: 'DM Serif Display', serif; font-size: 55px; font-weight: 400;
+                    letter-spacing: -2px;}
+
+.section-subtitle {margin-top: 15px; font-size: 14px; color: #888;}
+
+/* =================================
+   INTRO ANIMATION
+================================= */
+
+.header {animation: headerDown 1s ease forwards;}
+.logo {animation: fadeIn 1.2s ease forwards;}
+.hero-small {opacity: 0; animation: fadeUp .9s ease .2s forwards;}
+.hero-description {opacity: 0; animation: fadeUp 1s ease 1.05s forwards;}
+.scroll-down {opacity: 0; animation: fadeUp 1s ease 1.3s forwards;}
+.side-nav {opacity: 0; animation: sideReveal 1s ease 1s forwards;}
+
+@keyframes headerDown {from {opacity: 0; transform: translateY(-40px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+@keyframes fadeUp {
+    from {opacity: 0; transform: translateY(25px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+@keyframes titleReveal {
+    from {opacity: 0; transform: translateY(65px) skewY(4deg); clip-path: inset(0 0 100% 0);}
+    to {opacity: 1; transform: translateY(0) skewY(0); clip-path: inset(0 0 0 0);}
+}
+@keyframes reelReveal {
+    from {opacity: 0; transform: translate(45px, -38%) rotate(-9deg);}
+    to {opacity: 1; transform: translate(0, -43%) rotate(-5deg);}
+}
+@keyframes heroBgMove {
+    from {transform: scale(1.04) translateX(-1%);}
+    to {transform: scale(1.12) translateX(1%);}
+}
+@keyframes timelineMove {
+    from {transform: translateX(-110%);}
+    to {transform: translateX(190%);}
+}
+@keyframes sideReveal {
+    from {opacity: 0; transform: translate(30px, -50%);}
+    to {opacity: 1; transform: translate(0, -50%);}
+}
+@keyframes arrowMove {
+    0%, 100% {transform: translateY(0);}
+    50% {transform: translateY(6px);}
+}
+
+/* =================================
+   KEYFRAMES
+================================= */
+
+@keyframes fadeIn {from {opacity: 0;} to { opacity: 1;}}
+
+
+@keyframes fadeUp {from {opacity: 0;transform: translateY(35px);}
+    to {opacity: 1;transform: translateY(0);}}
+
+@keyframes titleReveal {from {opacity: 0;transform: translateY(60px) scale(0.95);}
+    to {opacity: 1;transform: translateY(0) scale(1);}}
+
+@keyframes sideReveal {from {opacity: 0;transform: translate(30px, -50%);}
+    to {opacity: 1;transform: translate(0, -50%);}}
+
+@keyframes arrowMove {0%, 100% {transform: translateY(0);}50% {transform: translateY(7px);}}
+
+
+/* =================================
+   HOVER EFFECT
+================================= */
+
+.main-nav a,
+.side-nav a {transition: opacity 0.3s ease;}
+.main-nav a:hover,
+.side-nav a:hover {opacity: 0.5;}
+.hero h1 {transition: letter-spacing 0.5s ease;}
+.hero h1:hover {letter-spacing: 5px;}
+
+
+/* =================================
+   ACCESSIBILITY
+================================= */
+
+@media (prefers-reduced-motion: reduce) 
+    {.header,
+    .logo,
+    .hero-small,
+    .hero h1,
+    .hero-description,
+    .scroll-down,
+    .side-nav {animation: none;opacity: 1;transform: none;}
+    .scroll-down span {animation: none;}}
+
+
+/* =========================
+   PROJECT
+========================= */
+
+        #project {scroll-margin-top: -140px;}
+        .section-heading {margin-bottom: 40px;}
+        .timeline-wrapper {
+            background: var(--panel-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.5);}
+        /* 상단 썸네일 셀렉트 바 */
+        .thumbnail-bar {
+            display: flex; gap: 25px; overflow-x: auto; padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color); margin-bottom: 30px;
+            scrollbar-width: thin; scrollbar-color: var(--border-color) transparent;}
+        .thumbnail-bar::-webkit-scrollbar { height: 6px; }
+        .thumbnail-bar::-webkit-scrollbar-track { background: transparent; }
+        .thumbnail-bar::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+
+        .thumb-item {
+            flex: 0 0 262px; aspect-ratio: 16/9; border: 2px solid var(--border-color);
+            border-radius: 6px; overflow: hidden; cursor: pointer; transition: all 0.3s ease;
+            position: relative; background: #000;}
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.3s; }
+        .thumb-item:hover img, input[type="radio"]:checked + .thumb-item img { opacity: 1; }
+        .thumb-item:hover, input[type="radio"]:checked + .thumb-item {
+            border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,255,204,0.2);}
+        .radio-input { display: none; }
+
+        /* 메인 프레임 컨테이너 */
+        .editor-frame {
+            position: relative; width: 100%; background: #000; border: 1px solid var(--border-color);
+            border-radius: 8px; overflow: hidden; min-height: 450px;}
+        .slide-track {
+            display: flex; width: 400%; transition: transform 0.55s cubic-bezier(0.77, 0, 0.175, 1);}
+        .project-panel {
+            width: 25%; padding: 30px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; align-items: center;}
+        @media(max-width: 1000px) {
+            .project-panel { grid-template-columns: 1fr; }}
+        .panel-video-box video {
+            width: 100%; aspect-ratio: 16/9; object-fit: contain; background: #000; border-radius: 6px;
+            border: 1px solid var(--border-color);}
+        .panel-info h3 { font-size: 26px; margin-bottom: 15px; font-family: var(--font-serif); color: #fff; }
+        .panel-info p { font-size: 14px; line-height: 1.8; color: #aaa; margin-bottom: 20px; }
+        .panel-meta {font-family: var(--font-mono);  font-size: 13px;  color: white;  display: flex;  flex-direction: column; 
+             gap: 12px;  margin-bottom: 10px;}
+        .panel-meta span { background: #1a1a22;  padding: 6px 12px;  border-radius: 4px;  border: 1px solid var(--border-color); 
+             width: fit-content;}
+        /* 프로젝트 패널 내 툴 아이콘 스타일 */
+        .project-tools {display: flex; align-items: center; gap: 10px;}
+        .project-tools img {width: 32px; height: 32px; object-fit: contain; background: #1a1a22; padding: 4px; border-radius: 4px; 
+            border: 1px solid var(--border-color); transition: transform 0.2s ease, border-color 0.2s ease;}
+        .project-tools img:hover {transform: translateY(-3px); border-color: var(--accent);}
+        .storyboard-link { display: inline-block; margin-top: 20px; font-family: var(--font-mono); font-size: 13px; 
+            color: #fff; background: #222; padding: 8px 16px; border-radius: 4px; border: 1px solid var(--border-color);
+            transition: background 0.2s, border-color 0.2s;}
+        .storyboard-link:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+
+        /* 라디오 상태에 따른 슬라이드 제어 */
+        #r1:checked ~ .editor-frame .slide-track { transform: translateX(0%); }
+        #r2:checked ~ .editor-frame .slide-track { transform: translateX(-25%); }
+        #r3:checked ~ .editor-frame .slide-track { transform: translateX(-50%); }
+        #r4:checked ~ .editor-frame .slide-track { transform: translateX(-75%); }
+
+        #r1:checked ~ .thumbnail-bar label[for="r1"],
+        #r2:checked ~ .thumbnail-bar label[for="r2"],
+        #r3:checked ~ .thumbnail-bar label[for="r3"],
+        #r4:checked ~ .thumbnail-bar label[for="r4"] {border-color: var(--accent);transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,255,204,0.2);}
+
+        #r1:checked ~ .thumbnail-bar label[for="r1"] img,
+        #r2:checked ~ .thumbnail-bar label[for="r2"] img,
+        #r3:checked ~ .thumbnail-bar label[for="r3"] img,
+        #r4:checked ~ .thumbnail-bar label[for="r4"] img {opacity: 1;}
+
+/* =========================
+   ABOUT
+========================= */
+
+.section-heading {margin-bottom: 20px;}
+.about-section {padding-top: 1px;}
+.section-midde{font-size: 20px; line-height: 2.2; color: #000000; margin-bottom: 1px;}
+.about-intro {font-size: 14px; line-height: 2.2; color: #777; margin-bottom: 30px;}
+.about-block {margin-bottom: 7px;}
+.block-title {display: flex; align-items: center; gap: 20px; margin-bottom: 3px;}
+.block-title::after {content: ""; height: 1px; background: #bbb; flex: 1;}
+.block-title span {display: inline-block; padding: 10px 30px; background: #050505; color: white;
+                     border-radius: 30px; font-family: 'DM Serif Display', serif; font-size: 14px;}
+
+
+/* =========================
+   SKILLS
+========================= */
+
+.skill-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 35px;}
+.skill-column {padding: 30px; background: #171717; border: 1px solid #303030; border-radius: 12px;}
+.skill-column h3 {font-size: 15px; color: #aaa; letter-spacing: 2px; margin-bottom: 25px;}
+.skill-icons {display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 25px;}
+.skill-icons img {width: 48px; height: 48px; object-fit: contain; transition: transform 0.3s ease;}
+.skill-icons img:hover {transform: translateY(-5px);}
+.skill-column ul {list-style: none; padding: 0; margin: 0;}
+.skill-column ul li {font-size: 14px; color: #ddd; padding: 8px 0; border-bottom: 1px solid #292929;}
+.skill-description {margin-top: 20px; font-size: 13px; line-height: 1.8; color: #888;}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+    .skill-grid {grid-template-columns: 1fr;}
+    .skill-column {padding: 22px;}}
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact-area {text-align: center;  padding: 120px 20px;  margin-top: 100px;  border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; position: relative; /* 모달 위치 잡기용 */}
+.contact-area h2 {font-family: 'DM Serif Display', serif;  font-size: clamp(40px, 7vw, 75px);  font-weight: 400;
+    line-height: 1.1; margin: 30px 0;}
+.contact-area > p:not(.section-number) {font-size: 13px; line-height: 2; color: #888;}
+
+/* 체크박스는 화면에서 숨기기 */
+#modal-toggle {display: none;}
+
+/* CONTACT ME 버튼 디자인 (label 태그) */
+.contact-button {display: inline-block;  margin-top: 35px;  padding: 15px 35px;  background: #050505; color: white; 
+    font-family: 'DM Serif Display', serif;  font-size: 13px;  letter-spacing: 1px; transition: all 0.3s; cursor: pointer;}
+.contact-button:hover { background: #777;  transform: translateY(-4px);}
+
+/* --- 모달(팝업) 기본 스타일 (평소엔 숨김) --- */
+.modal-overlay {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 뒷배경 어둡게 */ z-index: 9999; justify-content: center; align-items: center;}
+
+.modal-content {background: #fff; padding: 40px 30px; width: 90%; max-width: 380px; text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);}
+
+.modal-content h3 {font-family: 'DM Serif Display', serif; font-size: 24px; margin-bottom: 10px;}
+
+.modal-desc {font-size: 13px; color: #888; margin-bottom: 25px;}
+
+.contact-info-box {background: #f9f9f9; padding: 20px; margin-bottom: 25px; text-align: left;
+    font-size: 14px; line-height: 1.8;}
+
+.contact-info-box a {color: #050505; text-decoration: none;}
+.contact-info-box a:hover {text-decoration: underline;}
+
+/* 닫기 버튼 디자인 */
+.modal-close-btn {display: inline-block; background: #050505; color: #fff; border: none; padding: 10px 25px;
+    font-size: 12px; cursor: pointer; transition: background 0.3s;}
+.modal-close-btn:hover {background: #777;}
+
+/* --- 핵심: 체크박스가 체크되면 모달 창을 띄움 --- */
+#modal-toggle:checked ~ .modal-overlay {display: flex;}
+
+
+/* =========================
+   CONTACT & FOOTER SECTION
+========================= */
+.contact-footer-wrapper {
+    /* height: 100vh 제거하고 일반적인 블록 레이아웃으로 변경 */
+    width: 100%;
+    background: #fff;
+    scroll-margin-top: 20px;
+}
+
+.contact-area {
+    text-align: center; 
+    padding: 100px 20px 80px 20px; /* 위쪽과 아래쪽 여백을 넉넉하게 주어 깔끔하게 배치 */
+    position: relative;
+}
+
+.contact-area h2 {
+    font-family: 'DM Serif Display', serif; 
+    font-size: clamp(38px, 6vw, 70px); 
+    font-weight: 400;
+    line-height: 1.1; 
+    margin: 20px 0 25px 0;
+}
+
+.contact-desc-box {
+    font-size: 13px; 
+    line-height: 1.8; 
+    color: #888; 
+    margin-bottom: 3px;
+}
+
+.contact-desc-box b p {
+    margin-top: 50px; 
+    color: #333; 
+    font-size: 14px;
+}
+
+.contact-button {
+    display: inline-block; 
+    padding: 15px 35px; 
+    background: #050505; 
+    color: white; 
+    font-family: 'DM Serif Display', serif; 
+    font-size: 13px; 
+    letter-spacing: 1px; 
+    transition: all 0.3s; 
+    cursor: pointer;
+}
+
+/* FOOTER 영역 */
+.footer {
+    padding: 60px 8%; 
+    background: #050505; 
+    color: white; 
+    text-align: center; 
+    width: 100%;
+}
+
+.footer-logo {
+    display: inline-block; 
+    font-size: 22px; 
+    margin-bottom: 12px;
+    font-family: 'DM Serif Display', serif;
+    letter-spacing: 4px;
+}
+
+.footer p { 
+    font-size: 11px; 
+    color: #aaa; 
+    margin-bottom: 8px;
+}
+
+.top-button { 
+    display: inline-block; 
+    margin-top: 20px; 
+    font-family: 'DM Serif Display', serif; 
+    font-size: 12px; 
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer .copyright { 
+    margin-top: 25px; 
+    font-size: 10px; 
+    color: #666;
+}
+/* =========================
+   RESPONSIVE - TABLET
+========================= */
+
+@media (max-width: 900px) 
+    {.header-inner { width: 85%;}
+    .section {padding-left: 8%; padding-right: 8%;}
+    .side-nav {right: 2%; width: 65px;}
+    .project-item,
+    .project-item.reverse {grid-template-columns: 1fr; gap: 25px; margin-bottom: 100px;}
+    .project-item.reverse .project-info,
+    .project-item.reverse .project-media {order: initial;}
+    .project-info {order: 2;}
+    .project-media {order: 1;}}
+
+/* =========================
+   RESPONSIVE - MOBILE
+========================= */
+
+@media (max-width: 600px) 
+    {.header {height: 60px;}
+    .header-inner {width: 90%;}
+    .logo {font-size: 17px;}
+    .main-nav {gap: 15px;}
+    .main-nav a {font-size: 12px;}
+    .resume-link span {font-size: 17px;}
+    .side-nav {display: none;}
+    .hero h1 {font-size: 75px; letter-spacing: -4px; margin-bottom: 55px;}
+    .hero-small {font-size: 10px;}
+    .hero-description {font-size: 13px;}
+    .scroll-down {margin-top: 60px;}
+    .section {padding: 90px 7%;}
+    .section-heading h2 {font-size: 42px;}
+    .section-heading {margin-bottom: 45px;}
+    .project-info h3 {font-size: 28px;}
+    .project-info p {font-size: 12px;}
+    .about-intro {font-size: 12px;}
+    .profile-content {gap: 20px; padding-left: 0;}
+    .profile-image {width: 95px; height: 120px;}
+    .profile-row {font-size: 11px; gap: 10px;}
+    .profile-row span {width: 50px;}
+    .skill-grid {grid-template-columns: 1fr; gap: 50px;padding: 0;}
+    .skill-icons {gap: 8px;}
+    .contact-area {padding: 80px 10px;}
+    .footer {padding: 40px 15px;}}
+
+
+/* INTRO RESPONSIVE */
+@media (max-width: 900px) {
+    .hero {padding-left: 7%; padding-right: 7%;}
+    .hero-reel {right: 6%; width: 38vw; opacity: .55;}
+    .hero h1 {font-size: clamp(68px, 12vw, 120px);}
+}
+@media (max-width: 600px) {
+    .hero {min-height: 92vh; padding: 120px 7% 160px; text-align: left;}
+    .hero h1 {font-size: clamp(58px, 15vw, 90px); letter-spacing: -4px; margin-left: -3px;}
+    .hero h1 .outline-text {margin-left: 4vw; -webkit-text-stroke-width: .7px;}
+    .hero-small {font-size: 9px; letter-spacing: 2px;}
+    .hero-description {font-size: 12px;}
+    .hero-reel {top: auto; right: 7%; bottom: 145px; width: 42%; transform: rotate(-5deg); opacity: .7;}
+    .hero-timeline {left: 7%; right: 7%; bottom: 75px;}
+    .hero-index {display: none;}
+    .scroll-down {margin-top: 25px; font-size: 9px;}
+}
+@media (prefers-reduced-motion: reduce) {
+    .hero::before, .hero h1, .hero-reel, .hero-timeline,
+    .hero-small, .hero-description, .scroll-down, .header, .logo, .side-nav {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .timeline-track::before, .scroll-down span {animation: none !important;}
+}
+
+</style>
+</head>
+
+<body>
+    <!-- HEADER -->
+<header class="header">
+
+    <div class="header-inner">
+
+        <a href="#home" class="logo">YEWON.GIM</a>
+
+        <nav class="main-nav">
+            <a href="#project">PROJECT</a>
+            <a href="#about">ABOUT</a>
+
+            <a href="소스/이력서_김예원1.pdf" target="_blank" class="resume-link">
+                RESUME <span>▶</span>
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<!-- SIDE NAVIGATION -->
+<div class="side-nav">
+    <a href="#home">INTRO</a>
+    <a href="#project">PROJECT</a>
+    <a href="#about">ABOUT</a>
+    <a href="#contact">CONTACT</a>
+</div>
+
+
+<!-- HOME SECTION / MOTION GRAPHIC INTRO -->
+<section id="home" class="hero">
+
+    <div class="hero-content">
+
+        <p class="hero-small">VIDEO EDITOR & VISUAL CREATOR</p>
+
+        <h1>
+            <span>VISUAL</span>
+            <span class="outline-text">STORYTELLER.</span>
+        </h1>
+
+        <p class="hero-description">
+            영상으로 이야기를 만들고,<br>
+            감각적인 순간을 디자인합니다.
+        </p>
+
+        <a href="#project" class="scroll-down">
+            SCROLL TO EXPLORE <span>↓</span>
+        </a>
+
+    </div>
+
+    <!-- 프로젝트 장면 미리보기: 이미지 경로를 본인 파일명에 맞게 수정 -->
+    <div class="hero-reel" aria-label="Selected project previews">
+        <div class="reel-frame">
+            <img src="소스/손목.png" alt="손목닥터9988 프로젝트 미리보기">
+        </div>
+        <div class="reel-frame">
+            <img src="소스/갑타.png" alt="가비지타임 실사화 프로젝트 미리보기">
+        </div>
+        <div class="reel-frame">
+            <img src="소스/토리든실사.png" alt="팀 프로젝트 미리보기">
+        </div>
+    </div>
+
+    <!-- 영상 편집 타임라인 모션 그래픽 -->
+    <div class="hero-timeline" aria-hidden="true">
+        <span class="timeline-label">02:25</span>
+        <div class="timeline-track"></div>
+        <div class="timeline-track"></div>
+        <div class="timeline-track"></div>
+        <span class="timeline-label">REEL / 2026</span>
+    </div>
+
+    <span class="hero-index" aria-hidden="true">EDIT · DESIGN · CREATE</span>
+
+</section>
+
+<section id="project" class="section project-section">
+    <div class="section-heading">
+        <h2>PROJECT</h2>
+        <p class="section-subtitle">다양한 아이디어를 영상으로 구현한 작업물입니다.</p>
+    </div>
+
+    <!-- 타임라인/에디터 컨셉 프로젝트 뷰어 -->
+    <div class="timeline-wrapper">
+        <!-- 라디오 버튼 (숨김 처리) -->
+        <input id="r1" class="radio-input" type="radio" name="project_tab" onchange="pauseVideos()" checked>
+        <input id="r2" class="radio-input" type="radio" name="project_tab" onchange="pauseVideos()">
+        <input id="r3" class="radio-input" type="radio" name="project_tab" onchange="pauseVideos()">
+        <input id="r4" class="radio-input" type="radio" name="project_tab" onchange="pauseVideos()">
+
+        <!-- 상단 썸네일 탐색 바 -->
+        <div class="thumbnail-bar">
+            <label for="r1" class="thumb-item">
+                <img src="소스/손목.png" alt="손목닥터 썸네일">
+            </label>
+            <label for="r2" class="thumb-item">
+                <img src="소스/갑타.png" alt="갑타 썸네일">
+            </label>
+            <label for="r3" class="thumb-item">
+                <img src="소스/토리든실사.png" alt="토리든실사 썸네일">
+            </label>
+            <label for="r4" class="thumb-item">
+                <img src="소스/토리든애니.png" alt="토리든애니 썸네일">
+            </label>
+        </div>
+
+        <!-- 메인 에디터 화면 프레임 -->
+        <div class="editor-frame">
+            <div class="slide-track">
+                <div class="project-panel">
+                    <div class="panel-video-box">
+                        <video src="소스/손목닥터.mp4" poster="소스/손목.png"controls playsinline></video>
+                    </div>
+                    <div class="panel-info">
+                        <h3>손목닥터9988 AI 광고</h3>
+                        <p>기획부터 편집 및 모션 연출까지 총괄하여 제작한 건강 관리 애플리케이션 
+                            '손목닥터9988'의 2D 애니메이션 AI 광고 영상입니다. </p>
+                        <div class="panel-meta">
+                            <span>ROLE: 기획 / 연출 / 편집 / 제작 </span>
+                            <!-- 툴 아이콘 영역 추가 -->
+                            <div class="project-tools">
+                                <img src="소스/프로.png" alt="Premiere Pro" title="Premiere Pro">
+                                <img src="소스/포토샵.png" alt="Photoshop" title="Photoshop">
+                                <img src="소스/제미나이.png" alt="Gemini">
+                                <img src="소스/지피티.png" alt="ChatGPT">
+                                <img src="소스/구글플로우.png" alt="Google Flow">
+                                <img src="소스/수노.png" alt="Suno">
+                                <img src="소스/일레븐랩스.png" alt="ElevenLabs">
+                            </div>
+                        </div>
+                        <a href="소스/손목닥터.pdf" target="_blank" class="storyboard-link">기획안 확인하기 ↗</a>
+                    </div>
+                </div>
+                <!-- 프로젝트 02 -->
+                <div class="project-panel">
+                    <div class="panel-video-box">
+                        <video src="소스/갑타.mp4" poster="소스/갑타.png"controls playsinline></video>
+                    </div>
+                    <div class="panel-info">
+                        <h3>웹툰 '가비지타임' 실사화 AI 예고편</h3>
+                        <p>웹툰《가비지타임》의 2D 웹툰 캐릭터를 실사 AI 모델로 재탄생하여 현실적이고 역동적인 농구 연출을 실사로 구현한 예고편입니다.</p>
+                        <div class="panel-meta">
+                            <span>ROLE: 기획 / 연출 / 편집 / 제작 </span>
+                            <div class="project-tools">
+                                <img src="소스/프로.png" alt="Premiere Pro" title="Premiere Pro">
+                                <img src="소스/애펙.png" alt="After Effects" title="After Effects">
+                                <img src="소스/포토샵.png" alt="Photoshop" title="Photoshop">
+                                <img src="소스/제미나이.png" alt="Gemini">
+                                <img src="소스/지피티.png" alt="ChatGPT">
+                                <img src="소스/구글플로우.png" alt="Google Flow">
+                                <img src="소스/일레븐랩스.png" alt="ElevenLabs">
+                            </div>
+                        </div>
+                        <a href="소스/갑타.pdf" target="_blank" class="storyboard-link">기획안 확인하기 ↗</a>
+                    </div>
+                </div>
+
+                <!-- 프로젝트 03 -->
+                <div class="project-panel">
+                    <div class="panel-video-box">
+                        <video src="소스/토리든실사.mp4" poster="소스/토리든실사.png" controls playsinline preload="metadata"></video>
+                    </div>
+                    <div class="panel-info">
+                        <h3>'토리든 다이브인' 세럼&크림 세트 AI 광고(제품 중심)</h3>
+                        <p>'토리든 다이브인 세럼'과 '토리든 다이브인 크림' 두 제품의 제형, 성분, 텍스처 질감, 제품 광택 등을 감각적으로 보여주는 제품 중심 AI 광고입니다.</p>
+                        <div class="panel-meta">
+                            <span>ROLE: 기획 / 연출 / 편집 / 제작 </span>
+                            <div class="project-tools">
+                                <img src="소스/프로.png" alt="Premiere Pro" title="Premiere Pro">
+                                <img src="소스/애펙.png" alt="After Effects" title="After Effects">
+                                <img src="소스/포토샵.png" alt="Photoshop" title="Photoshop">
+                                <img src="소스/제미나이.png" alt="Gemini">
+                                <img src="소스/지피티.png" alt="ChatGPT">
+                                <img src="소스/구글플로우.png" alt="Google Flow">
+                                <img src="소스/일레븐랩스.png" alt="ElevenLabs">
+                                <img src="소스/힉스필드.png" alt="higgsfield">
+                            </div>
+                        </div>
+                        <a href="소스/토리든.pdf" target="_blank" class="storyboard-link">기획안 확인하기 ↗</a>
+                    </div>
+                </div>
+                <!-- 프로젝트 04 -->
+                <div class="project-panel">
+                    <div class="panel-video-box">
+                        <video src="소스/토리든애니.mp4" poster="소스/토리든애니.png" controls playsinline preload="metadata"></video>
+                    </div>
+                    <div class="panel-info">
+                        <h3>'토리든 다이브인' 세럼&크림 세트 AI 광고(애니메이션)</h3>
+                        <p>'토리든 다이브인 크림' 속 수영장에서 휴가를 즐기는 '토리든 다이브인 세럼'을 통해 속건조 케어를 3D 애니메이션으로 전달한 AI 광고 영상입니다.</p>
+                        <div class="panel-meta">
+                            <span>ROLE: 기획 / 연출 / 편집 / 제작 </span>
+                            <div class="project-tools">
+                                <img src="소스/프로.png" alt="Premiere Pro" title="Premiere Pro">
+                                <img src="소스/애펙.png" alt="After Effects" title="After Effects">
+                                <img src="소스/포토샵.png" alt="Photoshop" title="Photoshop">
+                                <img src="소스/제미나이.png" alt="Gemini">
+                                <img src="소스/지피티.png" alt="ChatGPT">
+                                <img src="소스/구글플로우.png" alt="Google Flow">
+                                <img src="소스/일레븐랩스.png" alt="ElevenLabs">
+                                <img src="소스/힉스필드.png" alt="higgsfield">
+                            </div>
+                        </div>
+                        <a href="소스/토리든.pdf" target="_blank" class="storyboard-link">기획안 확인하기 ↗</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 스크립트: 탭 전환 시 다른 비디오 자동 일시정지 -->
+<script>
+    function pauseVideos() {
+        const videos = document.querySelectorAll('video');
+        videos.forEach(video => {
+            video.pause();
+            video.currentTime = 0;});}
+</script>
+
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section about-section">
+
+        <div class="section-heading">
+            <h2>ABOUT</h2>
+        </div>
+        <div class="section-midde">
+            <h3>김 예 원 <br> Video Editor & Visual Creator</h3>
+        </div>
+        <div class="about-intro">
+            기본에 충실한 툴 활용과 효율적인 AI로 시각적 완성도를 높입니다.<br>
+            불필요한 요소는 줄이고, 전달하고자 하는 핵심을 명확하게 시각화합니다.
+        </div>
+
+        <!-- SKILLS -->
+        <div class="about-block">
+
+            <div class="block-title">
+                <span>Skills & Tools</span>
+            </div>
+        
+            <div class="skill-grid">
+        
+                <!-- EDITING TOOLS -->
+                <div class="skill-column">
+        
+                    <h3>EDITING TOOLS</h3>
+        
+                    <div class="skill-icons">
+                        <img src="소스/프로.png" alt="Premiere Pro">
+                        <img src="소스/애펙.png" alt="After Effects">
+                        <img src="소스/포토샵.png" alt="Photoshop">
+                    </div>
+        
+                    <ul>
+                        <li>Premiere Pro</li>
+                        <li>After Effects</li>
+                        <li>Photoshop</li>
+                    </ul>
+        
+                </div>
+        
+                <!-- AI & CREATIVE TOOLS -->
+                <div class="skill-column">
+        
+                    <h3>AI & CREATIVE TOOLS</h3>
+        
+                    <div class="skill-icons ai-icons">
+                        <img src="소스/제미나이.png" alt="Gemini">
+                        <img src="소스/지피티.png" alt="ChatGPT">
+                        <img src="소스/구글플로우.png" alt="Google Flow">
+                        <img src="소스/수노.png" alt="Suno">
+                        <img src="소스/일레븐랩스.png" alt="ElevenLabs">
+                    </div>
+        
+                    <ul>
+                        <li>Gemini</li>
+                        <li>ChatGPT</li>
+                        <li>Google Flow</li>
+                        <li>Suno</li>
+                        <li>ElevenLabs</li>
+                    </ul>
+        
+                    <p class="skill-description">
+                        최신 생성형 AI 툴을 활용한<br>
+                        다양한 영상 콘텐츠 제작 가능
+                    </p>
+        
+                </div>
+        
+            </div>
+        
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div id="contact" class="contact-footer-wrapper">
+            <div class="contact-area">
+                <h2>LET'S CREATE<br>SOMETHING NEW.</h2>
+                <div class="contact-desc-box">
+                    새로운 아이디어를 영상으로 표현하는 크리에이터가 되겠습니다.
+                    <br><br><b><p>
+                        Tel → 010.0000.0000<br>
+                        Email → ye_hana1@naver.com
+                    </p></b>
+                </div>
+        
+                <input type="checkbox" id="modal-toggle">
+                <label for="modal-toggle" class="contact-button">
+                    CONTACT ME ↗
+                </label>
+                    
+        
+                <!-- 3. 팝업(모달) 창 HTML -->
+                <div class="modal-overlay">
+                    <div class="modal-content">
+                        <h3>CONTACT INFO</h3>
+                        <p class="modal-desc">언제든 연락주세요!</p>
+                    <div class="contact-info-box">
+                        <p><strong>📞 전화번호:</strong> <a href="tel:010-0000-0000">010-0000-0000</a></p>
+                        <p><strong>✉️ 이메일:</strong> <a href="mailto:ye_hana1@naver.com">ye_hana1@naver.com</a></p>
+                    </div>
+                        <label for="modal-toggle" class="modal-close-btn">닫기</label>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- FOOTER -->
+            <footer class="footer">
+                <span class="footer-logo">YEWON.GIM</span>
+                <p>Video Editor & Visual Creator Portfolio</p>
+                <a href="#home" class="top-button">BACK TO TOP ↑</a>
+                <p class="copyright">© 2026 YEWON.GIM. All rights reserved.</p>
+            </footer>
+        </div>
+
+
+
+</body>
+</html>
